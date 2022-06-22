@@ -4,25 +4,28 @@ import 'package:provider/provider.dart';
 import 'package:udemy/screens/product_detail_screens.dart';
 
 class ProductItem extends StatelessWidget {
-  // final String id;
-  // final String title;
-  // final String imageUrl;
-  // ignore: use_key_in_widget_constructors
-  // const ProductItem(this.id, this.title, this.imageUrl);
+  const ProductItem({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Product>(context);
+    final product = Provider.of<Product>(context, listen: false);
+    // debug print when clicking on  fav button
+    debugPrint("changed");
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
         footer: GridTileBar(
           backgroundColor: Colors.black87,
-          leading: IconButton(
-            icon:  Icon( product.isFavorite? Icons.favorite : Icons.favorite_border),
-            color: Theme.of(context).colorScheme.secondary,
-            onPressed: () {
-              product.toggleFavoriteStatus();
+          leading: Consumer<Product>(
+            // differentiate product with value and child with _
+            builder: (ctx, val, _) => IconButton(
+              icon: Icon(
+                  product.isFavorite ? Icons.favorite : Icons.favorite_border),
+              color: Theme.of(context).colorScheme.secondary,
+              onPressed: () {
+                product.toggleFavoriteStatus();
               },
+            ),
           ),
           title: Text(
             product.title,
