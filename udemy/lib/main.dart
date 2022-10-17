@@ -1,8 +1,10 @@
+import 'package:udemy/providers/cart.dart';
+
 import './providers/products.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:udemy/screens/product_detail_screens.dart';
-import 'package:udemy/screens/products_overview_screens.dart';
+import '../screens/product_detail_screen.dart';
+import '../screens/products_overview_screen.dart';
 
 void main() => runApp(const MyApp());
 
@@ -11,20 +13,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (ctx) => Products(),
-      child: MaterialApp(
-        title: 'MyShop',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.purple)
-              .copyWith(secondary: Colors.deepOrange),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: Products(),
         ),
-        home: const ProductsOverviewScreen(),
-        routes: {
-          ProductDetailScreen.routeName: (ctx) => const ProductDetailScreen(),
-        },
-      ),
+        ChangeNotifierProvider.value(
+          value: Cart(),
+        ),
+      ],
+      child: MaterialApp(
+          title: 'MyShop',
+          theme: ThemeData(
+            fontFamily: 'Lato', colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.purple).copyWith(secondary: Colors.deepOrange),
+          ),
+          debugShowCheckedModeBanner: false,
+          home: const ProductsOverviewScreen(),
+          routes: {
+            ProductDetailScreen.routeName: (ctx) => const ProductDetailScreen(),
+          }),
     );
   }
 }
